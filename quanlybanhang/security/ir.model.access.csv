@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_category_model,access_category_model,model_category_model,base.group_user,1,1,1,1
+access_product_model,access_product_model,model_product_model,base.group_user,1,1,1,1
+access_customer_model,access_customer_model,model_customer_model,base.group_user,1,1,1,1
+access_order_model,access_order_model,model_order_model,base.group_user,1,1,1,1
+access_order_detail,access_order_detail,model_order_detail,base.group_user,1,1,1,1

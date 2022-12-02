@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="product_add_form" model="ir.ui.view">
+        <field name="name">Sản phẩm</field>
+        <field name="model">product.model</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group name="information">
+                        <group>
+                            <div class="oe_title mb24">
+                                <label for="name" string="Tên sản phẩm" style="font-weight: bold;"
+                                       class="oe_edit_only"/>
+                                <h1>
+                                    <field string="Tên sản phẩm" decoration-danger="name != ''" name="name"
+                                           placeholder="Nhập tên sản phẩm"/>
+                                </h1>
+                            </div>
+                        </group>
+                        <group>
+                            <div class="oe_title mb24">
+                                <field name="product_image" widget="image" class="oe_avatar"/>
+                            </div>
+                        </group>
+                    </group>
+                    <group name="images">
+                        <group>
+                            <field string="Giá bán" name="price"/>
+                            <field string="Giá mua" name="purchase_price"/>
+                        </group>
+                        <group>
+                            <field string="Nhóm sản phẩm" name="category_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="additional_information" string="Các thông tin thêm">
+                            <group>
+                                <field widget="html" string="Mô tả sản phẩm" name="description"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="product_tree_view" model="ir.ui.view">
+        <field name="name">Sản phẩm</field>
+        <field name="model">product.model</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field string="Tên sản phẩm" name="name"/>
+                <field string="Giá bán" name="price"/>
+                <field string="Giá mua" name="purchase_price"/>
+                <field string="Nhóm sản phẩm" name="category_id" widget="many2one"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="product_kanban">
+        <field name="name">Kanban</field>
+        <field name="model">product.model</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="price"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_vignette oe_semantic_html_override">
+                            <a type="open">
+                                <img t-att-src="kanban_image('product.model', 'product_image', record.id.value)"
+                                     class='oe_kanban_img' style="max-height: 150px; max-width: 80px;"/>
+                            </a>
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <a type="open">
+                                        <t t-if="record.category_id.raw_value">[<field name="category_id"/>]
+                                        </t>
+                                        <field name="name"/>
+                                    </a>
+                                </h4>
+                                <div name="tags"/>
+                                <ul>
+                                    <li>Giá bán:
+                                        <field name="price"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!--    <record id="customer_kanban" model="ir.ui.view">-->
+    <!--            <field name="name">customer</field>-->
+    <!--            <field name="model">res.partner</field>-->
+    <!--            <field name="inherit_id" ref="base.res_partner_kanban_view"/>-->
+    <!--            <field name="arch" type="xml">-->
+    <!--                <kanban>-->
+    <!--                </kanban>-->
+    <!--            </field>-->
+    <!--        </record>-->
+
+        <record id="order_calendar" model="ir.ui.view">
+            <field name="name">Đơn hàng</field>
+            <field name="model">order.model</field>
+            <field name="arch" type="xml">
+                <calendar string="Order Class Calendar" date_start="create_date" color="id">
+                    <field string="Đơn đặt hàng" name="name"/>
+                    <field string="Ngày tạo" name="create_date"/>
+                    <field string="Ngày cập nhật" name="write_date"/>
+                </calendar>
+            </field>
+        </record>
+
+    <record id="product_category_tree" model="ir.ui.view">
+        <field name="name">Nhóm sản phẩm</field>
+        <field name="model">category.model</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field string="Tên nhóm sản phẩm" name="name"/>
+                <field string="Mô tả" name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="product_category_form" model="ir.ui.view">
+        <field name="name">danh mục sản phẩm</field>
+        <field name="model">category.model</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field string="Tên nhóm sản phẩm" name="name" placeholder="Nhập tên nhóm sản phẩm"/>
+                    </group>
+                    <group>
+                        <field string="Mô tả: " placeholder="Nhập mô tả" name="description"/>
+                    </group>
+                    <group>
+                        <field string="Sản phẩm trong nhóm:" name="list_product"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="customer_tree" model="ir.ui.view">
+        <field name="name">Khách hàng</field>
+        <field name="model">customer.model</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field string="Tên khách hàng" name="name"/>
+                <field string="Địa chỉ" name="address"/>
+                <field string="Email khách hàng" name="email"/>
+                <field string="Số điện thoại" name="phone"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="customer_form" model="ir.ui.view">
+        <field name="name">Khách hàng</field>
+        <field name="model">customer.model</field>
+        <field name="arch" type="xml">
+            <form string="Partners">
+                <sheet>
+                    <group name="information">
+                        <group>
+                            <div class="oe_title mb24">
+                                <label for="name" string="Tên khách hàng" style="font-weight: bold;"
+                                       class="oe_edit_only"/>
+                                <h1>
+                                    <field string="Tên khách hàng" name="name"
+                                           placeholder="Nhập tên khách hàng"/>
+                                </h1>
+                            </div>
+                        </group>
+                        <group>
+                            <div class="oe_title mb24">
+                                <field name="avatar" widget="image" class="oe_avatar"/>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="email" placeholder="Địa chỉ Email" string="Địa chỉ Email:"/>
+                            <label for="phone" string="Số điện thoại:"/>
+                            <div class="o_address_format">
+                                <field name="phone" placeholder="Số điện thoại" class="o_address_street"
+                                       widget="phone"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field string="Địa chỉ khách hàng:" name="address" placeholder="Địa chỉ"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="order_tree" model="ir.ui.view">
+        <field name="name">order.model</field>
+        <field name="model">order.model</field>
+        <field name="arch" type="xml">
+            <tree decoration-warning="state == 'mới'" decoration-info="state == 'xác nhận'"
+                  decoration-success="state == 'hoàn thành'" decoration-danger="state == 'hủy bỏ'">
+                <field name="name" string="Mã đơn hàng"/>
+                <field name="date_order" string="Ngày tạo"/>
+                <field name="customer_id" string="Khách hàng" widget="many2one_avatar"/>
+                <field name="user_id" string="Nhân viên bán hàng" widget="many2one_avatar"/>
+                <field name="amount" string="Tổng tiền" sum="Total"/>
+                <field name="state" string="Trạng thái"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="quotation_tree" model="ir.ui.view">
+        <field name="name">order.model</field>
+        <field name="model">order.model</field>
+        <field name="arch" type="xml">
+            <tree decoration-warning="state == 'mới'" decoration-info="state == 'xác nhận'"
+                  decoration-success="state == 'hoàn thành'" decoration-danger="state == 'hủy bỏ'">
+                <field name="name" string="Mã đơn báo giá"/>
+                <field name="date_order" string="Ngày tạo"/>
+                <field name="customer_id" string="Khách hàng" widget="many2one_avatar"/>
+                <field name="user_id" string="Nhân viên bán hàng" widget="many2one_avatar"/>
+                <field name="amount" string="Tổng tiền" sum="Total"/>
+                <field name="state" string="Trạng thái"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="quotation_form" model="ir.ui.view">
+        <field name="name">Báo giá</field>
+        <field name="model">order.model</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button id="button_confirm" name="action_confirm" string=" Xác nhận" class="fa fa-check btn-info"
+                            type="object"
+                            attrs="{'invisible': [('state','in',('xác nhận','hoàn thành','hủy bỏ'))]}"/>
+                    <button id="button_cancel" name="action_cancel" string=" Hủy bỏ" class="fa fa-times btn-danger"
+                            type="object"
+                            states="mới,xác nhận,hoàn thành"/>
+                    <button id="button_quotation" name="action_new" string=" Chuyển thành báo giá"
+                            class="fa fa-plus btn-outline-primary"
+                            type="object"
+                            states="hủy bỏ"/>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group name="images">
+                        <group>
+                            <field string="Khách hàng" name="customer_id" widget="res_partner_many2one"
+                                   attrs="{'readonly': [('state','in',('xác nhận','hoàn thành','hủy bỏ'))]}"/>
+                            <field string="Địa chỉ khách hàng: " name="shipping_address"
+                                   decoration-muted="shipping_address != ''" readonly="1" force_save="1"/>
+                            <field string="Số điện thoại: " name="shipping_phone"
+                                   decoration-muted="shipping_phone != ''" readonly="1" force_save="1"/>
+                        </group>
+                        <group>
+                            <field string="Ngày tạo" name="date_order"
+                                   attrs="{'readonly': [('state','in',('xác nhận','hoàn thành','hủy bỏ'))]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="additional_information" string="Chi tiết">
+                            <field name="order_details" attrs="{'readonly': [('state','in',('hoàn thành','hủy bỏ'))]}">
+                                <tree string="Chi tiết đơn hàng" widget="section_and_note_one2many" editable="bottom">
+                                    <control>
+                                        <create name="add_line_control" string="Thêm một sản phẩm"/>
+                                        <create name="add_section_control" string="Thêm khu vực"
+                                                context="{'default_display_type': 'line_section'}"/>
+                                        <create name="add_note_control" string="Thêm một ghi chú"
+                                                context="{'default_display_type': 'line_section'}"/>
+                                    </control>
+                                    <field string="Sản phẩm" name="product_id" force_save="1"/>
+                                    <field string="Mô tả" name="name" widget="section_and_note_text" optional="show"/>
+                                    <field string="Số lượng" name="product_uom_qty"/>
+                                    <field string="Đơn giá" name="price_unit"/>
+                                    <field string="Thành tiền" name="price_subtotal"/>
+                                </tree>
+                            </field>
+                            <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                <group class="oe_subtotal_footer oe_right" colspan="2">
+                                    <field string="Tổng" readonly="1" name="amount"
+                                           decoration-danger="amount &gt; 0"/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </group>
+                        </page>
+                        <page name="another_information" string="Các thông tin thêm">
+                            <group>
+                                <group>
+                                    <field string="Nhân viên bán hàng" name="user_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="customer_sign" string="Chữ ký của khách hàng">
+                            <group>
+                                <field string="Ký bởi" name="sign_by"/>
+                            </group>
+                            <group>
+                                <field string="Ký vào ngày" name="sign_on"/>
+                            </group>
+                            <group>
+                                <field string="Chữ ký" name="sign_image" widget="image"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="product_search" model="ir.ui.view">
+        <field name="name">product_search</field>
+        <field name="model">product.model</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm">
+                <field name="name" string="Tên sản phẩm"/>
+                <!--filter section start-->
+                <group expand='0' string='Filters'>
+                    <filter name='price' string="Giá bán (&lt; 300.000đ)" domain="[('price', '&lt;', 300000)]"/>
+                    <filter name='price' string="Giá bán (&gt; 300.000đ)" domain="[('price', '&gt;', 300000)]"/>
+                    <separator/>
+                    <filter name="purchase_price" string="Giá mua (&lt; 300.000đ)"
+                            domain="[('purchase_price', '&lt;', 300000)]"/>
+                    <filter name="purchase_price" string="Giá mua (&gt; 300.000đ)"
+                            domain="[('purchase_price', '&gt;', 300000)]"/>
+                </group>
+                <!--filter section end-->
+                <!--group by section start-->
+                <group expand='0' string='Group by...'>
+                    <filter string='Nhóm sản phẩm' name="category_id" context="{'group_by': 'category_id'}"/>
+                </group>
+                <!--group by section end-->
+            </search>
+        </field>
+    </record>
+
+    <record id="category_search" model="ir.ui.view">
+        <field name="name">category_search</field>
+        <field name="model">category.model</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm">
+                <field name="name" string="Tên nhóm sản phẩm"/>
+                <field name="description" string="Mô tả có chứa từ:"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="customer_search" model="ir.ui.view">
+        <field name="name">customer_search</field>
+        <field name="model">customer.model</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <search string="Customer search">
+                <field name="name" string="Tên"/>
+                <field name="address" string="Địa chỉ"/>
+                <field name="email" string="Email"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="quotation_search" model="ir.ui.view">
+        <field name="name">quotation_search</field>
+        <field name="model">order.model</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <search string="Quotation search">
+                <field name="name" string="Mã báo giá"/>
+                <field name="customer_id" string="Tên khách hàng"/>
+                <field name="user_id" string="Tên nhân viên bán hàng"/>
+                <!--filter section start-->
+                <group expand='0' string='Filters'>
+                    <filter name='amount' string="Đơn với tổng tiền (&lt; 500.000đ)"
+                            domain="[('amount', '&lt;', 500000)]"/>
+                    <filter name='amount' string="Đơn với tổng tiền (&gt; 500.000đ)"
+                            domain="[('amount', '&gt;', 500000)]"/>
+                    <separator></separator>
+                    <filter name="date_order" string="Đơn hôm nay" domain="[('date_order','&gt;=',
+                    context_today().strftime('%%Y-%%m-%%d')), ('date_order','&lt;=',context_today().strftime('%%Y-%%m-%%d'))]"/>
+                    <filter name="date_order" string="Đơn tuần này"
+                            domain="[('date_order', '&lt;=', ((context_today()+relativedelta(weeks=0, weekday=-1)).strftime('%Y-%m-%d'))),
+                    ('date_order', '&gt;=', ((context_today()-relativedelta(weeks=1, weekday=0)).strftime('%Y-%m-%d')))]"/>
+                </group>
+                <!--filter section end-->
+                <!--group by section start-->
+                <group expand='0' string='Group by...'>
+                    <filter string='Khách hàng' name="customer_id" context="{'group_by': 'customer_id'}"/>
+                    <filter string='Nhân viên bán hàng' name="user_id" context="{'group_by': 'user_id'}"/>
+                    <filter string='Trạng thái' name="state" context="{'group_by': 'state'}"/>
+                </group>
+                <!--group by section end-->
+            </search>
+        </field>
+    </record>
+
+    <record id="product_action" model="ir.actions.act_window">
+        <field name="name">Sản phẩm</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.model</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                    (0, 0, {'view_mode': 'tree', 'view_id': ref('product_tree_view')}),
+                    (0, 0, {'view_mode': 'kanban', 'view_id': ref('product_kanban')}),
+                    (0, 0, {'view_mode': 'form', 'view_id': ref('product_add_form')})]"/>
+        <field name="search_view_id" ref="product_search"/>
+    </record>
+
+    <!--    <record id="respartner_action" model="ir.actions.act_window">-->
+    <!--        <field name="name">Khách hàng</field>-->
+    <!--        <field name="type">ir.actions.act_window</field>-->
+    <!--        <field name="res_model">res.partner</field>-->
+    <!--        <field name="view_ids" eval="[(5, 0, 0),-->
+    <!--                    (0, 0, {'view_mode': 'kanban', 'view_id': ref('customer_kanban')})]"/>-->
+    <!--    </record>-->
+
+    <record id="category_action" model="ir.actions.act_window">
+        <field name="name">Nhóm sản phẩm</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">category.model</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('product_category_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('product_category_form')})]"/>
+        <field name="search_view_id" ref="category_search"/>
+    </record>
+
+    <record id="customer_action" model="ir.actions.act_window">
+        <field name="name">Khách hàng</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">customer.model</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                    (0, 0, {'view_mode': 'tree', 'view_id': ref('customer_tree')}),
+                    (0, 0, {'view_mode': 'form', 'view_id': ref('customer_form')})]"/>
+        <field name="search_view_id" ref="customer_search"/>
+    </record>
+
+    <record id="quotation_action" model="ir.actions.act_window">
+        <field name="name">Báo giá</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">order.model</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                    (0, 0, {'view_mode': 'tree', 'view_id': ref('quotation_tree')}),
+                    (0, 0, {'view_mode': 'form', 'view_id': ref('quotation_form')})]"/>
+    </record>
+
+    <record id="order_action" model="ir.actions.act_window">
+        <field name="name">Đơn hàng</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">order.model</field>
+        <field name="domain">[('state','=','xác nhận')]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                    (0, 0, {'view_mode': 'tree', 'view_id': ref('order_tree')}),
+                    (0, 0, {'view_mode': 'calendar', 'view_id': ref('order_calendar')})]"/>
+    </record>
+
+    <menuitem id="menu_lv_management"
+              name="Quản lý bán hàng"
+              sequence="2"
+              action="category_action"
+              groups="base.group_user"
+              web_icon="quanlybanhang,static/description/icon.png"/>
+    <menuitem id="menu_product_management"
+              name="Sản phẩm"
+              action="product_action"
+              parent="menu_lv_management"
+              sequence="0"
+              groups="base.group_user"/>
+    <menuitem id="menu_category_management"
+              name="Nhóm sản phẩm"
+              action="category_action"
+              parent="menu_lv_management"
+              sequence="1"
+              groups="base.group_user"/>
+    <!--    <menuitem id="menu_respartner_management"-->
+    <!--              name="Khách hàng"-->
+    <!--              action="respartner_action"-->
+    <!--              parent="menu_lv_management"-->
+    <!--              sequence="1"-->
+    <!--              groups="base.group_user"/>-->
+    <menuitem id="menu_order_management"
+              name="Đơn hàng"
+              parent="menu_lv_management"
+              sequence="2"
+              groups="base.group_user"/>
+    <menuitem id="menu_child_order_management"
+              name="Đơn hàng"
+              action="order_action"
+              parent="menu_order_management"
+              sequence="90"
+              groups="base.group_user"/>
+    <menuitem id="menu_customer_management"
+              name="Khách hàng"
+              action="customer_action"
+              parent="menu_order_management"
+              sequence="0"
+              groups="base.group_user"/>
+    <menuitem id="menu_quotation_management"
+              name="Báo giá"
+              action="quotation_action"
+              parent="menu_order_management"
+              sequence="90"
+              groups="base.group_user"/>
+</odoo>
